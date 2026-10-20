@@ -1,0 +1,78 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-1.1.x", "rhel-openssl-3.0.x"]
+  previewFeatures = []
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  name            String?
+  businessName    String?
+  businessType    String?   @default("retail")
+  role            String    @default("customer")
+  isActive        Boolean   @default(false)
+  licenseKey      String?   @unique
+  licenseExpiry   DateTime?
+  businessPhone   String?
+  ownerPhone      String?
+  country         String?
+  currency        String?
+  address         String?
+  branchCount     Int       @default(1)
+  staffCount      Int       @default(1)
+  posTerminals    Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  userId      String?
+  name        String
+  description String?
+  sku         String?
+  barcode     String?
+  price       Float
+  costPrice   Float    @default(0)
+  stock       Int      @default(0)
+  minStock    Int      @default(0)
+  category    String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  userId    String?
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  balance   Float    @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Staff {
+  id        String   @id @default(cuid())
+  userId    String?
+  name      String
+  role      String?
+  email     String?
+  phone     String?
+  salary    Float    @default(0)
+  joinDate  DateTime?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
